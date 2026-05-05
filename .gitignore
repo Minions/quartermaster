@@ -1,0 +1,10 @@
+# Wails build output
+build/
+
+# Go
+*.exe
+*.test
+
+# OS
+.DS_Store
+Thumbs.db

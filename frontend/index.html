@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minions</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Setup screen ── -->
+  <div id="screen-setup" class="screen active">
+    <div class="brand">
+      <div class="brand-hex">⬡</div>
+      <h1>Minions</h1>
+      <p class="brand-sub">Installer</p>
+    </div>
+
+    <div class="field">
+      <label for="install-path">Base of Operations</label>
+      <div class="path-row">
+        <input id="install-path" type="text" spellcheck="false" autocomplete="off" />
+        <button id="browse-btn" class="btn-secondary">Browse…</button>
+      </div>
+      <p class="field-hint">Your minions will build your Dominion here. Choose well to contain the inevitable explosions.</p>
+    </div>
+
+    <button id="install-btn" class="btn-primary">Assemble the Team →</button>
+  </div>
+
+  <!-- ── Auth screen ── -->
+  <div id="screen-auth" class="screen">
+    <div class="auth-header">
+      <h2>Secure the Network</h2>
+      <p class="auth-sub">Your ministers need git access to ensure they can recover from Minion hijinks.</p>
+    </div>
+
+    <!-- Provider tabs -->
+    <div class="provider-tabs" id="provider-tabs">
+      <button class="provider-tab active" data-provider="github">GitHub</button>
+      <button class="provider-tab" data-provider="bitbucket">Bitbucket</button>
+      <button class="provider-tab" data-provider="gitlab">GitLab</button>
+      <button class="provider-tab" data-provider="other">Other</button>
+    </div>
+
+    <!-- OAuth panel — shown for GitHub / Bitbucket / GitLab -->
+    <div id="oauth-panel">
+
+      <!-- State: idle — sign-in button -->
+      <div id="oauth-idle">
+        <p class="oauth-desc" id="oauth-provider-desc">
+          Sign in with GitHub to grant repository access.
+        </p>
+        <button id="oauth-signin-btn" class="btn-primary">Sign in with GitHub</button>
+      </div>
+
+      <!-- State: device code — shown for GitHub and GitLab -->
+      <div id="oauth-device" class="hidden">
+        <p class="oauth-desc">Copy this code, then click the button to open your browser:</p>
+        <div class="device-code-display" id="oauth-user-code"></div>
+        <button id="oauth-open-browser-btn" class="btn-secondary">Open Browser ↗</button>
+        <div class="oauth-waiting-row">
+          <div class="spinner-sm"></div>
+          <span>Waiting for authorization…</span>
+        </div>
+      </div>
+
+      <!-- State: browser waiting — shown for Bitbucket (PKCE loopback) -->
+      <div id="oauth-browser-waiting" class="hidden">
+        <p class="oauth-desc">A browser window has opened. Complete authorization there, then return here.</p>
+        <div class="oauth-waiting-row">
+          <div class="spinner-sm"></div>
+          <span>Waiting for browser callback…</span>
+        </div>
+      </div>
+
+      <!-- State: error -->
+      <div id="oauth-error-panel" class="hidden">
+        <div class="auth-error" id="oauth-error-text"></div>
+        <button id="oauth-retry-btn" class="btn-secondary">Try again</button>
+      </div>
+
+    </div>
+
+    <!-- PAT panel — shown for "Other" provider only -->
+    <div id="pat-panel" class="hidden">
+      <div class="auth-fields">
+        <div class="field-row">
+          <label for="git-host">Host</label>
+          <input id="git-host" type="text" spellcheck="false" autocomplete="off"
+                 placeholder="git.example.com" />
+        </div>
+        <div class="field-row">
+          <label for="git-username">Username</label>
+          <input id="git-username" type="text" spellcheck="false" autocomplete="off"
+                 placeholder="your-username" />
+        </div>
+        <div class="field-row">
+          <label for="git-token">Personal Access Token</label>
+          <input id="git-token" type="password" spellcheck="false" autocomplete="off"
+                 placeholder="token or password" />
+        </div>
+      </div>
+      <div id="pat-error" class="auth-error hidden"></div>
+      <button id="pat-connect-btn" class="btn-primary">Connect &amp; Deploy</button>
+    </div>
+
+    <button id="skip-auth-btn" class="btn-ghost">Skip (minions will prompt for credentials when needed)</button>
+  </div>
+
+  <!-- ── Progress screen ── -->
+  <div id="screen-progress" class="screen">
+    <h2 id="progress-title">Building your secret Lairs…</h2>
+
+    <div class="steps-list" id="steps">
+      <div class="step pending" data-step="1">
+        <div class="step-icon"><span class="icon-inner">○</span></div>
+        <div class="step-body">
+          <div class="step-name">Establish base of operations</div>
+          <div class="step-msg"></div>
+        </div>
+      </div>
+      <div class="step pending" data-step="2">
+        <div class="step-icon"><span class="icon-inner">○</span></div>
+        <div class="step-body">
+          <div class="step-name">Install Node.js</div>
+          <div class="step-msg"></div>
+        </div>
+      </div>
+      <div class="step pending" data-step="3">
+        <div class="step-icon"><span class="icon-inner">○</span></div>
+        <div class="step-body">
+          <div class="step-name">Install Git</div>
+          <div class="step-msg"></div>
+        </div>
+      </div>
+      <div class="step pending" data-step="4">
+        <div class="step-icon"><span class="icon-inner">○</span></div>
+        <div class="step-body">
+          <div class="step-name">Install Claude Code</div>
+          <div class="step-msg"></div>
+        </div>
+      </div>
+      <div class="step pending" data-step="5">
+        <div class="step-icon"><span class="icon-inner">○</span></div>
+        <div class="step-body">
+          <div class="step-name">Configure network access</div>
+          <div class="step-msg"></div>
+        </div>
+      </div>
+      <div class="step pending" data-step="6">
+        <div class="step-icon"><span class="icon-inner">○</span></div>
+        <div class="step-body">
+          <div class="step-name">Deploy the Dominion</div>
+          <div class="step-msg"></div>
+        </div>
+      </div>
+      <div class="step pending" data-step="7">
+        <div class="step-icon"><span class="icon-inner">○</span></div>
+        <div class="step-body">
+          <div class="step-name">Launch the Dominion</div>
+          <div class="step-msg"></div>
+        </div>
+      </div>
+      <div class="step pending" data-step="8">
+        <div class="step-icon"><span class="icon-inner">○</span></div>
+        <div class="step-body">
+          <div class="step-name">Schedule on-call duty</div>
+          <div class="step-msg"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="error-panel" class="error-panel hidden">
+      <div class="error-label">Assembly failed</div>
+      <div id="error-text" class="error-text"></div>
+      <button id="retry-btn" class="btn-secondary">← Try Again</button>
+    </div>
+  </div>
+
+  <!-- ── Done screen ── -->
+  <div id="screen-done" class="screen">
+    <div class="done-icon">✓</div>
+    <h2>Your team is live!</h2>
+    <p class="done-sub">Mission control is open in your browser.</p>
+    <button id="open-btn" class="btn-primary">Open Mission Control</button>
+    <button id="close-btn" class="btn-ghost">Close this window</button>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
