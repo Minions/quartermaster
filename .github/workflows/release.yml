@@ -38,7 +38,7 @@ jobs:
       - name: Compute Volta SHA-256 (Windows zip)
         shell: bash
         run: |
-          VOLTA_VERSION=$(grep 'voltaVersion' launcher.go | head -1 | grep -oP '"[0-9.]+"' | tr -d '"')
+          VOLTA_VERSION=$(grep '^const voltaVersion' launcher.go | grep -oP '"[0-9.]+"' | tr -d '"')
           curl -fsSLo volta.zip \
             "https://github.com/volta-cli/volta/releases/download/v${VOLTA_VERSION}/volta-${VOLTA_VERSION}-windows.zip"
           echo "VOLTA_WIN_SHA256=$(sha256sum volta.zip | awk '{print $1}')" >> "$GITHUB_ENV"
@@ -87,7 +87,7 @@ jobs:
 
       - name: Compute Volta SHA-256 (macOS arm64)
         run: |
-          VOLTA_VERSION=$(grep 'voltaVersion' launcher.go | head -1 | grep -oE '"[0-9.]+"' | tr -d '"')
+          VOLTA_VERSION=$(grep '^const voltaVersion' launcher.go | grep -oE '"[0-9.]+"' | tr -d '"')
           curl -fsSLo volta.tar.gz \
             "https://github.com/volta-cli/volta/releases/download/v${VOLTA_VERSION}/volta-${VOLTA_VERSION}-macos-aarch64.tar.gz"
           echo "VOLTA_MAC_ARM64_SHA256=$(shasum -a 256 volta.tar.gz | awk '{print $1}')" >> "$GITHUB_ENV"
@@ -124,7 +124,7 @@ jobs:
 
       - name: Compute Volta SHA-256 (macOS x86-64)
         run: |
-          VOLTA_VERSION=$(grep 'voltaVersion' launcher.go | head -1 | grep -oE '"[0-9.]+"' | tr -d '"')
+          VOLTA_VERSION=$(grep '^const voltaVersion' launcher.go | grep -oE '"[0-9.]+"' | tr -d '"')
           curl -fsSLo volta.tar.gz \
             "https://github.com/volta-cli/volta/releases/download/v${VOLTA_VERSION}/volta-${VOLTA_VERSION}-macos.tar.gz"
           echo "VOLTA_MAC_X86_SHA256=$(shasum -a 256 volta.tar.gz | awk '{print $1}')" >> "$GITHUB_ENV"
