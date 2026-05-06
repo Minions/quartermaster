@@ -34,6 +34,7 @@ func spawnHidden(nodePath, mainJS, workDir string, env []string) error {
 
 	const CREATE_NO_WINDOW = 0x08000000
 	const CREATE_NEW_PROCESS_GROUP = 0x00000200
+	const CREATE_UNICODE_ENVIRONMENT = 0x00000400
 
 	si := &syscall.StartupInfo{}
 	si.Cb = uint32(unsafe.Sizeof(*si))
@@ -45,7 +46,7 @@ func spawnHidden(nodePath, mainJS, workDir string, env []string) error {
 		0, // lpProcessAttributes
 		0, // lpThreadAttributes
 		0, // bInheritHandles = false
-		uintptr(CREATE_NO_WINDOW|CREATE_NEW_PROCESS_GROUP),
+		uintptr(CREATE_NO_WINDOW|CREATE_NEW_PROCESS_GROUP|CREATE_UNICODE_ENVIRONMENT),
 		uintptr(unsafe.Pointer(&envBlock[0])),
 		uintptr(unsafe.Pointer(workDirPtr)),
 		uintptr(unsafe.Pointer(si)),
