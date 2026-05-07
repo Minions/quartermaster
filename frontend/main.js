@@ -187,9 +187,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   });
 
   // ── Progress screen — retry ──
+  // Re-run the installation directly — no need to revisit setup/auth since
+  // pendingInstallPath and any git credentials are still in memory, and all
+  // earlier steps are idempotent (they skip if already done).
 
   $('retry-btn').addEventListener('click', () => {
-    showScreen('setup');
+    beginInstall();
   });
 
   // ── Done screen ──

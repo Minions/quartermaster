@@ -58,7 +58,18 @@ func launchDominion(mainJS string, dominionRoot string, log func(string)) (int, 
 		time.Sleep(500 * time.Millisecond)
 	}
 
-	return port, fmt.Errorf("dominion did not start within 30 seconds")
+	// Read the log for diagnostics. Cap at 500 bytes from the tail so the error
+	// message stays compact enough to display in the UI.
+	logPath := filepath.Join(dominionRoot, "dominion.log")
+	if logBytes, readErr := os.ReadFile(logPath); readErr == nil && len(logBytes) > 0 {
+		preview := string(logBytes)
+		const maxPreview = 500
+		if len(preview) > maxPreview {
+			preview = "…\n" + preview[len(preview)-maxPreview:]
+		}
+		return port, fmt.Errorf("dominion did not start within 30 seconds\n\nLog (%s):\n%s", logPath, preview)
+	}
+	return port, fmt.Errorf("dominion did not start within 30 seconds — check %s for details", logPath)
 }
 
 func findNode() (string, error) {
