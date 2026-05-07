@@ -28,7 +28,7 @@ var dominionBundleURL = "https://install.minions.tools/v0.1.0/dominion-bundle.zi
 // If destDir already contains a valid installation, this is a no-op.
 // The log callback receives human-readable progress messages.
 func downloadDominion(destDir string, log func(string)) error {
-	mainJS := filepath.Join(destDir, "dist", "main.js")
+	mainJS := filepath.Join(destDir, "main.js")
 	if _, err := os.Stat(mainJS); err == nil {
 		log("Dominion already installed — skipping download.")
 		return nil

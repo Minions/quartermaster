@@ -186,7 +186,7 @@ func (a *App) runInstallation(installPath string) {
 	a.emitStep(6, "done", "")
 
 	// Step 7 — Launch Dominion
-	mainJS := filepath.Join(dominionDir, "dist", "main.js")
+	mainJS := filepath.Join(dominionDir, "main.js")
 	a.emitStep(7, "running", "")
 	port, err := launchDominion(mainJS, installPath, a.logger(7))
 	if err != nil {
