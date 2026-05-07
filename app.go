@@ -176,7 +176,7 @@ func (a *App) runInstallation(installPath string) {
 	}
 
 	// Step 6 — Download Dominion runtime
-	dominionDir := filepath.Join(installPath, "dominion")
+	dominionDir := filepath.Join(installPath, "__tools")
 	a.emitStep(6, "running", "")
 	if err := downloadDominion(dominionDir, a.logger(6)); err != nil {
 		a.emitStep(6, "error", err.Error())
